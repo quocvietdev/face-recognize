@@ -1,0 +1,27 @@
+{
+  "name": "face-recognition-rest-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "Rakesh",
+  "license": "ISC",
+  "dependencies": {
+    "@tensorflow/tfjs-node": "^4.17.0",
+    "@vladmandic/face-api": "^1.7.13",
+    "canvas": "^2.8.0",
+    "cloudinary": "^2.0.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.1",
+    "mongoose": "^5.12.13",
+    "multer": "^1.4.5-lts.1",
+    "perf_hooks": "^0.0.1"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
