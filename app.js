@@ -97,26 +97,34 @@ async function uploadLabeledImages(images, label) {
     const descriptions = [];
     // Loop through the images
    let data = await uploadImage(images[0])
-    for (let i = 0; i < images.length; i++) {
-      const img = await canvas.loadImage(images[i]);
-      counter = (i / images.length) * 100;
-      console.log(`Progress = ${counter}%`);
+   
+      const img = await canvas.loadImage(images[0]);
+      counter = 1 * 100;
+      console.log(`Progress = ${counter}% ,${0}`);
       // Read each face and save the face descriptions in the descriptions array
       const detections = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
+     
+     if(detections?.descriptor){
       descriptions.push(detections.descriptor);
-    }
+      const createFace = new FaceModel({
+        label: label,
+        descriptions: descriptions,
+        image_url:data
+      });
+     let dataTest = await createFace.save();
+      return true;
+     }else{
+      return false;
+     }
+    
+    
+   
 
     // Create a new face document with the given label and save it in DB
-    const createFace = new FaceModel({
-      label: label,
-      descriptions: descriptions,
-      image_url:data
-    });
-    await createFace.save();
-    return true;
+    
   } catch (error) {
-    console.log(error);
-    return (error);
+    console.log("error");
+    return false;
   }
 }
 
@@ -160,19 +168,14 @@ async function getDescriptorsFromDB(image) {
 
 }
 
-
-
-
 app.post("/post-face",async (req,res)=>{
     const File1 = req.files?.File1?.tempFilePath
-  
     const label = req.body.label
     let result = await uploadLabeledImages([File1], label);
     if(result){
-        
         res.json({message:"Face data stored successfully"})
     }else{
-        res.json({message:"Something went wrong, please try again."})
+        res.json({message:"Your face cannot be analyzed, please try again."})
         
     }
 })
