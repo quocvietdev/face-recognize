@@ -123,7 +123,7 @@ async function uploadLabeledImages(images, label) {
     // Create a new face document with the given label and save it in DB
     
   } catch (error) {
-    console.log("error");
+    console.log("error",error);
     return false;
   }
 }
@@ -139,14 +139,14 @@ async function getDescriptorsFromDB(image) {
   for (i = 0; i < faces.length; i++) {
     // Change the face data descriptors from Objects to Float32Array type
     for (j = 0; j < faces[i].descriptions.length; j++) {
-      faces[i].descriptions[j] = new Float32Array(Object.values(faces[i].descriptions[j]));
+      faces[i].descriptions[j] = new Float32Array(Object.values(faces[i]?.descriptions[j]));
     }
     // Turn the DB face docs to
-    faces[i] = new faceapi.LabeledFaceDescriptors(faces[i].label, faces[i].descriptions);
+    faces[i] = new faceapi.LabeledFaceDescriptors(faces[i].label, faces[i]?.descriptions);
   }
 
   // Load face matcher to find the matching face
-  const faceMatcher = new faceapi.FaceMatcher(faces, 0.8);
+  const faceMatcher = new faceapi.FaceMatcher(faces, 0.6);
 
   // Read the image using canvas or other method
   const img = await canvas.loadImage(image);
